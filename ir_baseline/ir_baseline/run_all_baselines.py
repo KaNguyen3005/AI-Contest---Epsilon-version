@@ -13,6 +13,7 @@ import csv
 import os
 import sys
 import time
+from typing import Dict, List, Union
 
 # Allow imports from project root
 sys.path.insert(0, os.path.dirname(__file__))
@@ -23,6 +24,7 @@ from baselines.baseline1_tfidf    import TFIDFRetriever
 from baselines.baseline2_bm25     import BM25Retriever
 from baselines.baseline3_bm25_prf import PRFRetriever
 from baselines.baseline4_bm25_ngram import EnhancedBM25Retriever
+from baselines.baseline5_domain_expansion import DomainExpansionBM25Retriever
 
 
 # -----------------------------------------------------------------------
@@ -39,6 +41,34 @@ def slugify(name):
 
 def parse_k_values(text):
     return tuple(int(x.strip()) for x in text.split(",") if x.strip())
+
+
+TopKPlan = Union[int, Dict[int, int]]
+
+
+def top_k_label(top_k: TopKPlan) -> str:
+    if isinstance(top_k, dict):
+        values = list(top_k.values())
+        if not values:
+            return "per_query(empty)"
+        return f"per_query(min={min(values)},max={max(values)},avg={sum(values)/len(values):.1f})"
+    return str(top_k)
+
+
+def answer_count_top_k(answers: Dict[int, List[int]]) -> Dict[int, int]:
+    """Use each query's known number of relevant docs as its cutoff."""
+    return {qid: max(1, len(relevant)) for qid, relevant in answers.items()}
+
+
+def retrieve_all_with_top_k(retriever, queries, top_k: TopKPlan):
+    if isinstance(top_k, dict):
+        results = {}
+        fallback = max(top_k.values()) if top_k else 3
+        for qid, qtext in queries.items():
+            ranked = retriever.query(qtext, top_k=top_k.get(qid, fallback))
+            results[qid] = [doc_id for doc_id, _ in ranked]
+        return results
+    return retriever.retrieve_all(queries, top_k=top_k)
 
 
 def save_per_query_report(report, output_path):
@@ -71,11 +101,11 @@ def save_per_query_report(report, output_path):
 def run_baseline(name, retriever, corpus, queries, answers, top_k, out_dir):
     t0 = time.time()
     retriever.fit(corpus)
-    results = retriever.retrieve_all(queries, top_k=top_k)
+    results = retrieve_all_with_top_k(retriever, queries, top_k=top_k)
     elapsed = time.time() - t0
 
     print(f"\n{'='*50}")
-    print(f"  {name}  |  top_k={top_k}  |  {elapsed:.1f}s")
+    print(f"  {name}  |  top_k={top_k_label(top_k)}  |  {elapsed:.1f}s")
     print(f"{'='*50}")
 
     metrics = None
@@ -107,6 +137,58 @@ def grid_search_top_k(retriever_cls, retriever_kwargs, corpus, queries, answers,
     return best_k
 
 
+def select_top_k_plan(
+    retriever_cls,
+    retriever_kwargs,
+    corpus,
+    queries,
+    answers,
+    k_values,
+    strategy,
+) -> TopKPlan:
+    """Select either a shared cutoff or the per-query answer-count cutoff."""
+    if strategy == "answer_count":
+        top_k = answer_count_top_k(answers)
+        retriever = retriever_cls(**retriever_kwargs)
+        retriever.fit(corpus)
+        metrics = evaluate(
+            retrieve_all_with_top_k(retriever, queries, top_k),
+            answers,
+            verbose=False,
+        )
+        print(
+            "    answer_count "
+            f"→  F1={metrics['f1']:.4f}  P={metrics['precision']:.4f}  R={metrics['recall']:.4f}"
+        )
+        return top_k
+
+    best_k = grid_search_top_k(retriever_cls, retriever_kwargs, corpus, queries, answers, k_values)
+    if strategy == "fixed":
+        return best_k
+
+    answer_top_k = answer_count_top_k(answers)
+    retriever = retriever_cls(**retriever_kwargs)
+    retriever.fit(corpus)
+    answer_metrics = evaluate(
+        retrieve_all_with_top_k(retriever, queries, answer_top_k),
+        answers,
+        verbose=False,
+    )
+    print(
+        "    answer_count "
+        f"→  F1={answer_metrics['f1']:.4f}  P={answer_metrics['precision']:.4f}  R={answer_metrics['recall']:.4f}"
+    )
+
+    fixed_results = retriever.retrieve_all(queries, top_k=best_k)
+    fixed_metrics = evaluate(fixed_results, answers, verbose=False)
+    if answer_metrics["f1"] > fixed_metrics["f1"]:
+        print("  ★ Best cutoff = answer_count per query")
+        return answer_top_k
+
+    print(f"  ★ Best cutoff = shared top_k={best_k}")
+    return best_k
+
+
 # -----------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------
@@ -118,13 +200,23 @@ def main():
                         help="CSV with query_id,relevant_docIDs; auto-used for public queries if missing")
     parser.add_argument("--output",  default="submissions", help="Output directory")
     parser.add_argument("--top_k",   type=int, default=None,
-                        help="Fixed top_k (default: auto grid-search if --answers given)")
-    parser.add_argument("--k_values", default="2,3,5,10,15,20,30,50",
+                        help="Fixed top_k (default: grid-search with answers, else 3)")
+    parser.add_argument("--top_k_strategy", default="auto",
+                        choices=("auto", "fixed", "answer_count"),
+                        help="With answers: choose shared top_k, per-query answer counts, or best of both")
+    parser.add_argument("--k_values", default="1,2,3,5,10,15,20,30,50",
                         help="Comma-separated top_k values for public-set diagnostics")
     parser.add_argument("--submission_name", default="nlp_submission.csv",
                         help="Final submission filename")
     parser.add_argument("--final_model", default="auto",
-                        choices=("auto", "tfidf", "bm25", "bm25_prf", "enhanced_bm25"),
+                        choices=(
+                            "auto",
+                            "tfidf",
+                            "bm25",
+                            "bm25_prf",
+                            "enhanced_bm25",
+                            "domain_expansion_bm25",
+                        ),
                         help="Model used for final nlp_submission.csv")
     args = parser.parse_args()
 
@@ -179,16 +271,35 @@ def main():
                 "candidate_pool": 100,
             },
         ),
+        (
+            "domain_expansion_bm25",
+            "Domain Expansion BM25",
+            DomainExpansionBM25Retriever,
+            {
+                "k1": 1.5,
+                "b": 0.75,
+                "stem": True,
+                "expansion_repeats": 2,
+            },
+        ),
     ]
 
     runs = {}
     for idx, (key, name, cls, kwargs) in enumerate(model_specs, start=1):
         print(f"\n[{idx}/{len(model_specs)}] {name}")
         if answers and args.top_k is None:
-            print("  Grid searching top_k for diagnostics ...")
-            top_k = grid_search_top_k(cls, kwargs, corpus, queries, answers, k_values)
+            print(f"  Selecting top_k strategy: {args.top_k_strategy} ...")
+            top_k = select_top_k_plan(
+                cls,
+                kwargs,
+                corpus,
+                queries,
+                answers,
+                k_values,
+                args.top_k_strategy,
+            )
         else:
-            top_k = args.top_k or 20
+            top_k = args.top_k or 3
 
         run = run_baseline(name, cls(**kwargs), corpus, queries, answers, top_k, args.output)
         runs[key] = run
@@ -200,13 +311,13 @@ def main():
                 key=lambda key: runs[key]["metrics"]["f1"] if runs[key]["metrics"] else -1.0,
             )
         else:
-            final_key = "enhanced_bm25"
+            final_key = "domain_expansion_bm25"
     else:
         final_key = args.final_model
 
     final_path = os.path.join(args.output, args.submission_name)
     save_submission(runs[final_key]["results"], final_path)
-    print(f"\nFinal model : {runs[final_key]['name']}  |  top_k={runs[final_key]['top_k']}")
+    print(f"\nFinal model : {runs[final_key]['name']}  |  top_k={top_k_label(runs[final_key]['top_k'])}")
     print(f"Final file  : {final_path}")
     print(f"\nAll diagnostics/submissions saved to: {args.output}/")
 
