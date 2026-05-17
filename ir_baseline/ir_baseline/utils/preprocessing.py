@@ -4,7 +4,6 @@ No pretrained models — only classical NLP tools.
 """
 
 import re
-import string
 from typing import List
 
 # ---------------------------------------------------------------------------
@@ -177,3 +176,24 @@ def preprocess(text: str, stem: bool = True) -> List[str]:
     if stem:
         tokens = [porter_stem(t) for t in tokens]
     return tokens
+
+
+def make_ngrams(tokens: List[str], n: int) -> List[str]:
+    """Return n-gram tokens joined by underscore: boundary_layer."""
+    if n <= 1:
+        return list(tokens)
+    return ["_".join(tokens[i:i + n]) for i in range(len(tokens) - n + 1)]
+
+
+def preprocess_with_ngrams(
+    text: str,
+    stem: bool = True,
+    min_n: int = 1,
+    max_n: int = 3,
+) -> List[str]:
+    """Preprocess text and append contiguous n-grams for phrase-aware retrieval."""
+    tokens = preprocess(text, stem=stem)
+    features: List[str] = []
+    for n in range(min_n, max_n + 1):
+        features.extend(make_ngrams(tokens, n))
+    return features

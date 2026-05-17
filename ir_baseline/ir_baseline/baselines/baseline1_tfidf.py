@@ -129,7 +129,7 @@ if __name__ == "__main__":
     from utils.data_loader import load_corpus, load_queries, load_answers, save_submission
     from utils.evaluate import evaluate
 
-    CORPUS_DIR  = "data/docs"
+    CORPUS_DIR  = "data/Cranfield"
     QUERY_CSV   = "data/public_test_queries.csv"
     ANSWER_CSV  = "data/public_test_answers.csv"
     OUTPUT_CSV  = "submissions/tfidf_submission.csv"

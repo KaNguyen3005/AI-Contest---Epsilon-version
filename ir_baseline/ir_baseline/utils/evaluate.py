@@ -49,3 +49,25 @@ def evaluate(
 
     return metrics
 
+
+def evaluate_per_query(
+    results: Dict[int, List[int]],
+    answers: Dict[int, List[int]],
+) -> Dict[int, Dict[str, object]]:
+    """Return per-query metrics and ranks of relevant docs for diagnostics."""
+    report: Dict[int, Dict[str, object]] = {}
+    for qid, relevant in answers.items():
+        predicted = results.get(qid, [])
+        p, r, f1 = precision_recall_f1(predicted, relevant)
+        ranks = {
+            doc_id: predicted.index(doc_id) + 1 if doc_id in predicted else None
+            for doc_id in relevant
+        }
+        report[qid] = {
+            "precision": p,
+            "recall": r,
+            "f1": f1,
+            "relevant_ranks": ranks,
+            "predicted": predicted,
+        }
+    return report

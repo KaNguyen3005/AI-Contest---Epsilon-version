@@ -12,7 +12,8 @@ ir_baseline/
 ├── baselines/
 │   ├── baseline1_tfidf.py      # TF-IDF + Cosine Similarity
 │   ├── baseline2_bm25.py       # BM25 (Okapi BM25)
-│   └── baseline3_bm25_prf.py   # BM25 + Pseudo-Relevance Feedback
+│   ├── baseline3_bm25_prf.py   # BM25 + Pseudo-Relevance Feedback
+│   └── baseline4_bm25_ngram.py # BM25 + n-gram / phrase reranking
 └── utils/
     ├── preprocessing.py        # Tokenize, stop-word removal, Porter Stemmer
     ├── data_loader.py          # Load corpus / queries / answers / save CSV
@@ -25,7 +26,7 @@ ir_baseline/
 
 ```
 data/
-├── docs/
+├── Cranfield/
 │   ├── 1.txt
 │   ├── 2.txt
 │   └── ... (1400 files)
@@ -40,7 +41,7 @@ data/
 ### Chạy tất cả baselines (có evaluate)
 ```bash
 python run_all_baselines.py \
-    --corpus  data/docs \
+    --corpus  data/Cranfield \
     --queries data/public_test_queries.csv \
     --answers data/public_test_answers.csv \
     --output  submissions/
@@ -49,7 +50,7 @@ python run_all_baselines.py \
 ### Chạy vòng bí mật (không có answers)
 ```bash
 python run_all_baselines.py \
-    --corpus  data/docs \
+    --corpus  data/Cranfield \
     --queries data/private_test_queries.csv \
     --top_k   20 \
     --output  submissions/
@@ -61,6 +62,7 @@ cd ir_baseline
 python -m baselines.baseline1_tfidf
 python -m baselines.baseline2_bm25
 python -m baselines.baseline3_bm25_prf
+python -m baselines.baseline4_bm25_ngram
 ```
 
 ---
@@ -103,6 +105,17 @@ python -m baselines.baseline3_bm25_prf
 
 ---
 
+### Baseline 4 — Enhanced BM25
+| Thành phần | Chi tiết |
+|---|---|
+| First pass | BM25 unigram để lấy candidate pool |
+| Rerank | Cộng điểm n-gram overlap và exact phrase match |
+| Constraint | Không dùng pretrained model, không cần thư viện ngoài |
+
+**Khi nào dùng**: Khi query có cụm kỹ thuật như "boundary layer", "hypersonic flow", "internal pressure".
+
+---
+
 ## Pipeline Xử Lý Văn Bản
 
 ```
@@ -131,7 +144,12 @@ Porter Stemming (tự implement, không dùng NLTK)
 ### Top-K (quan trọng nhất với F1)
 Script tự grid-search top-K nếu có `--answers`. Thông thường:
 - F1 tốt nhất ở top-K ≈ số relevant docs trung bình mỗi query
-- Tập Cranfield thường ~5–10 relevant docs/query → thử k ∈ {5,10,15,20}
+- Script mặc định thử `k ∈ {2,3,5,10,15,20,30,50}`
+
+### Output
+- Mỗi model sinh một file `*_submission.csv`
+- Nếu có answers, mỗi model sinh thêm `*_per_query.csv` để debug rank từng query
+- File nộp cuối cùng mặc định là `submissions/nlp_submission.csv`
 
 ### BM25
 - `k1 ∈ [1.2, 2.0]`: Tăng nếu corpus có nhiều technical terms
@@ -151,6 +169,7 @@ Script tự grid-search top-K nếu có `--answers`. Thông thường:
 | TF-IDF Cosine | ~0.35–0.45 |
 | BM25 | ~0.45–0.55 |
 | BM25 + PRF | ~0.50–0.60 |
+| Enhanced BM25 | cần validate theo public/private split |
 
 *Số liệu ước tính, phụ thuộc vào top-K và preprocessing.*
 
