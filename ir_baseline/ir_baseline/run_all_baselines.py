@@ -25,6 +25,7 @@ from baselines.baseline2_bm25     import BM25Retriever
 from baselines.baseline3_bm25_prf import PRFRetriever
 from baselines.baseline4_bm25_ngram import EnhancedBM25Retriever
 from baselines.baseline5_domain_expansion import DomainExpansionBM25Retriever
+from baselines.baseline6_robust_rrf import RobustRRFEnsembleRetriever
 
 
 # -----------------------------------------------------------------------
@@ -130,10 +131,10 @@ def grid_search_top_k(retriever_cls, retriever_kwargs, corpus, queries, answers,
     for k in k_values:
         results = retriever.retrieve_all(queries, top_k=k)
         m = evaluate(results, answers, verbose=False)
-        print(f"    top_k={k:3d}  →  F1={m['f1']:.4f}  P={m['precision']:.4f}  R={m['recall']:.4f}")
+        print(f"    top_k={k:3d}  ->  F1={m['f1']:.4f}  P={m['precision']:.4f}  R={m['recall']:.4f}")
         if m["f1"] > best_f1:
             best_f1, best_k = m["f1"], k
-    print(f"  ★ Best top_k = {best_k}  (F1 = {best_f1:.4f})")
+    print(f"  Best top_k = {best_k}  (F1 = {best_f1:.4f})")
     return best_k
 
 
@@ -158,7 +159,7 @@ def select_top_k_plan(
         )
         print(
             "    answer_count "
-            f"→  F1={metrics['f1']:.4f}  P={metrics['precision']:.4f}  R={metrics['recall']:.4f}"
+            f"->  F1={metrics['f1']:.4f}  P={metrics['precision']:.4f}  R={metrics['recall']:.4f}"
         )
         return top_k
 
@@ -176,16 +177,16 @@ def select_top_k_plan(
     )
     print(
         "    answer_count "
-        f"→  F1={answer_metrics['f1']:.4f}  P={answer_metrics['precision']:.4f}  R={answer_metrics['recall']:.4f}"
+        f"->  F1={answer_metrics['f1']:.4f}  P={answer_metrics['precision']:.4f}  R={answer_metrics['recall']:.4f}"
     )
 
     fixed_results = retriever.retrieve_all(queries, top_k=best_k)
     fixed_metrics = evaluate(fixed_results, answers, verbose=False)
     if answer_metrics["f1"] > fixed_metrics["f1"]:
-        print("  ★ Best cutoff = answer_count per query")
+        print("  Best cutoff = answer_count per query")
         return answer_top_k
 
-    print(f"  ★ Best cutoff = shared top_k={best_k}")
+    print(f"  Best cutoff = shared top_k={best_k}")
     return best_k
 
 
@@ -200,7 +201,7 @@ def main():
                         help="CSV with query_id,relevant_docIDs; auto-used for public queries if missing")
     parser.add_argument("--output",  default="submissions", help="Output directory")
     parser.add_argument("--top_k",   type=int, default=None,
-                        help="Fixed top_k (default: grid-search with answers, else 3)")
+                        help="Fixed top_k (default: grid-search with answers, else 5)")
     parser.add_argument("--top_k_strategy", default="auto",
                         choices=("auto", "fixed", "answer_count"),
                         help="With answers: choose shared top_k, per-query answer counts, or best of both")
@@ -216,6 +217,7 @@ def main():
                             "bm25_prf",
                             "enhanced_bm25",
                             "domain_expansion_bm25",
+                            "robust_rrf",
                         ),
                         help="Model used for final nlp_submission.csv")
     args = parser.parse_args()
@@ -282,6 +284,20 @@ def main():
                 "expansion_repeats": 2,
             },
         ),
+        (
+            "robust_rrf",
+            "Robust RRF Ensemble",
+            RobustRRFEnsembleRetriever,
+            {
+                "stem": True,
+                "candidate_pool": 120,
+                "rrf_k": 60,
+                "bm25_weight": 1.0,
+                "prf_weight": 0.75,
+                "phrase_weight": 0.95,
+                "domain_weight": 0.85,
+            },
+        ),
     ]
 
     runs = {}
@@ -299,7 +315,7 @@ def main():
                 args.top_k_strategy,
             )
         else:
-            top_k = args.top_k or 3
+            top_k = args.top_k or 5
 
         run = run_baseline(name, cls(**kwargs), corpus, queries, answers, top_k, args.output)
         runs[key] = run
@@ -311,7 +327,7 @@ def main():
                 key=lambda key: runs[key]["metrics"]["f1"] if runs[key]["metrics"] else -1.0,
             )
         else:
-            final_key = "domain_expansion_bm25"
+            final_key = "robust_rrf"
     else:
         final_key = args.final_model
 

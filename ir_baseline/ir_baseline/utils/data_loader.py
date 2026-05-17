@@ -33,7 +33,11 @@ def load_queries(query_csv: str) -> Dict[int, str]:
     with open(query_csv, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            queries[int(row["query_id"])] = row["query"]
+            qid = (row.get("query_id") or "").strip()
+            query = (row.get("query") or "").strip()
+            if not qid or not query:
+                continue
+            queries[int(qid)] = query
     return queries
 
 
@@ -45,8 +49,11 @@ def load_answers(answer_csv: str) -> Dict[int, List[int]]:
     with open(answer_csv, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            qid = int(row["query_id"])
-            doc_ids = [int(x) for x in row["relevant_docIDs"].split()
+            qid_text = (row.get("query_id") or "").strip()
+            if not qid_text:
+                continue
+            qid = int(qid_text)
+            doc_ids = [int(x) for x in (row.get("relevant_docIDs") or "").split()
                        if x.strip()]
             answers[qid] = doc_ids
     return answers
@@ -62,4 +69,4 @@ def save_submission(results: Dict[int, List[int]], output_path: str):
         for qid in sorted(results.keys()):
             doc_ids = results[qid]
             writer.writerow([qid, " ".join(map(str, doc_ids))])
-    print(f"Saved submission → {output_path}")
+    print(f"Saved submission -> {output_path}")

@@ -182,3 +182,35 @@ Script tự grid-search top-K nếu có `--answers`. Thông thường:
 3. **Field-weighted BM25** — title vs abstract có trọng số khác nhau
 4. **RM3 / KL-divergence language model** — thay Rocchio bằng language model PRF
 5. **Score fusion** — kết hợp TF-IDF score + BM25 score (linear interpolation)
+
+---
+
+## Supervised Profile-kNN Baseline
+
+Baseline `ProfileKNNRetriever` dung `public_test_queries.csv` va
+`public_test_answers.csv` lam tap train, sau do du doan query moi bang kNN
+theo do giong query va tron them BM25. Cau hinh competition mac dinh la
+`profile_weight=0.80`, `lexical_weight=0.20`; day la muc tot nhat trong grid
+nhanh tren leave-one-out va blocked holdout public. Khi validate tren chinh
+public split, script tu dong dung leave-one-out de khong lay dap an cua dung
+query dang danh gia.
+
+```bash
+python ir_baseline/ir_baseline/run_profile_knn_baseline.py
+```
+
+Chay cho private test:
+
+```bash
+python ir_baseline/ir_baseline/run_profile_knn_baseline.py ^
+    --queries data/private_test_queries.csv ^
+    --output submissions/profile_knn_private_submission.csv
+```
+
+Neu private query id trung public query id nhung noi dung khac, script van dung
+noi dung query de tim nearest profile va khong loai profile theo query id,
+vi leave-one-out chi bat khi `--queries` trung file public train.
+
+Luu y: baseline nay co the tang F1 manh neu private queries cung phan phoi
+voi public train, nhung van co rui ro overfit neu private doi chu de hoac cach
+dien dat.

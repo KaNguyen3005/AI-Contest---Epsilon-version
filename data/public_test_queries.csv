@@ -1,4 +1,202 @@
 query_id,query
-62,"how far around a cylinder and under what conditions of flow,  if any, is the velocity just outside of the boundary layer a linear function of the distance around the cylinder ."
-160,compressive circumferential stresses in a torispherical shell reveal the possibility of buckling under internal pressure . has anyone investigated for which ranges of shell parameters these stresses are sufficiently large to cause elastic buckling .
-215,is it possible to predict the shape of a shroud which will allow simulation of the nose region flow field for a sphere in hypersonic flow .
+1,what are the boundary layer equations for steady incompressible flow with no pressure gradient past a flat plate .
+2,what solutions exist for the incompressible laminar boundary layer on a flat plate in simple shear flow .
+3,how does viscosity affect the boundary layer on a flat plate in an incompressible fluid of small viscosity .
+4,what semi empirical formulae describe skin friction in a laminar boundary layer in compressible flow .
+5,how can wall shearing stress be calculated from heat transfer measurements in compressible boundary layer flow .
+6,what is the second approximation to the laminar compressible boundary layer on a flat plate in slip flow .
+7,how does an applied magnetic field affect the compressible laminar boundary layer on a flat plate .
+8,what are the skin friction and heat transfer characteristics of a laminar boundary layer on a cylinder in axial flow .
+9,what methods exist for solving the laminar boundary layer equations at a stagnation point with mass injection .
+10,how does leading edge separation of laminar boundary layers occur in supersonic flow at a compression corner .
+11,what experimental evidence exists about the effect of surface cooling on boundary layer transition at supersonic speeds .
+12,how does distributed surface roughness affect boundary layer transition and turbulence spread at supersonic speeds .
+13,what is known from published data about the effect of roughness elements on transition from laminar to turbulent flow .
+14,what flight measurements have been made of wall pressure fluctuations and boundary layer turbulence .
+15,what experimental techniques are used for studying turbulent boundary layers and mass transfer cooling .
+16,how does surface cooling influence the lateral spread of turbulence in supersonic boundary layers .
+17,what is the effect of reynolds number on the transition from laminar to turbulent flow in supersonic boundary layers .
+18,how is vorticity convected through a shock wave and what are the effects on downstream turbulence .
+19,what are the effects of three dimensional roughness on boundary layer transition at mach numbers 1.6 and 2.0 .
+20,what does experimental data show about wall pressure fluctuations in turbulent boundary layers during flight .
+21,what analytic solutions describe transient heat conduction in a composite double layer slab with triangular heat input .
+22,what is the effect of slip flow on heat transfer in a laminar boundary layer over a flat plate .
+23,how is heat transfer calculated in slip flow conditions where rarefied gas effects are significant .
+24,what techniques exist for investigating heat transfer and surface phenomena under hypersonic flow conditions .
+25,what are the structural and thermal design considerations for high speed aircraft subjected to aerodynamic heating .
+26,how does aerodynamic heating affect the structural integrity and aeroelastic behavior of aircraft .
+27,what similarity laws apply to stress analysis of heated wings with large temperature gradients .
+28,what theoretical analysis describes the laminar boundary layer at an axisymmetric stagnation point with large air injection rates .
+29,what experimental methods are used to study mass transfer cooling in high speed aerodynamics .
+30,how is heat transfer from a boundary layer to the wall computed in compressible flows with temperature gradients .
+31,what is the one dimensional transient heat conduction solution for a double layer slab exposed to a linear heat rate .
+32,how does temperature jump affect heat transfer in rarefied gas flow over a flat plate .
+33,what methods determine heat transfer at the stagnation point of blunt bodies in hypersonic flow .
+34,how does aerodynamic heating interact with structural loads in aircraft structural models .
+35,what are the heat transfer characteristics for flow past circular cylinders in incompressible conditions .
+36,what is the relationship between skin friction and heat transfer in compressible boundary layer flows .
+37,how does wall cooling reduce heat transfer and what are the design implications for hypersonic vehicles .
+38,what composite slab heat conduction solutions are available for materials subjected to short duration heating .
+39,what is piston theory and how is it applied as an aerodynamic tool for solving aeroelastic problems .
+40,what procedure can be used for calculating flutter speed of wings at high supersonic mach numbers with camber deflections .
+41,what are the flutter characteristics of light uniform cantilever wings at varying fluid densities .
+42,what is the general theory of aircraft flutter and how do aerodynamic elastic and inertial forces interact .
+43,what aeroelastic effects arise from configuration variables on lifting surfaces at mach numbers from 0.7 to 6.86 .
+44,what is two dimensional panel flutter and how does buckling affect the critical flutter velocity .
+45,how do transient aerodynamic heating and external loads simultaneously affect aircraft structural models .
+46,what supersonic flow solutions exist for oscillating two dimensional airfoils with nonlinear thickness effects .
+47,how are unsteady aerodynamic forces calculated for high speed flutter prediction using simplification methods .
+48,what experimental results confirm or refute theoretical flutter predictions for wings at high supersonic speeds .
+49,what structural models are required to correctly simulate aeroelastic behavior of aircraft under combined loads .
+50,how does pressure differential across a plate affect the critical reduced velocity for panel flutter .
+51,what aeroelastic considerations must be addressed when designing high speed aircraft structure .
+52,how does camber deflection influence the flutter speed of wings in supersonic flow .
+53,what effects do variations in planform and airfoil shape have on flutter characteristics at high mach numbers .
+54,how does piston theory simplify unsteady aerodynamic calculations for aeroelastic problems at high speeds .
+55,what experimental evidence exists for flutter of all movable control surfaces at supersonic and hypersonic speeds .
+56,what analytical methods predict flutter onset for wings with double wedge airfoil sections .
+57,how does fluid density affect the flutter speed of lightweight cantilever wing structures .
+58,what is the relationship between aeroelastic similarity laws and structural testing of heated wing models .
+59,what information is available on the symmetric inviscid hypersonic flow at the stagnation point of a blunt body .
+60,how can the hypersonic similarity law be applied to pressure distributions on bodies of revolution .
+61,what are the aerodynamic characteristics of a circular cylinder at mach number 6.86 and high angles of attack .
+62,what is the theory of hypersonic gas flow with a power law shock wave for plane and axisymmetric flows .
+63,what similar solutions exist for strong blast waves and how are they applied to steady hypersonic flow .
+64,how is viscous hypersonic flow treated over a flat plate and what boundary layer solutions are available .
+65,what is the inviscid hypersonic flow field over blunt nosed slender bodies and how is it calculated .
+66,how does surface pressure vary along bodies of revolution in hypersonic flow and what limits apply to similarity laws .
+67,what techniques allow simulation of nose region flow field for spheres in hypersonic conditions .
+68,what are the pressure and velocity fields at the stagnation point region of a blunt body in hypersonic inviscid flow .
+69,what newtonian impact theory results compare with experimental data for spheres in hypersonic mach numbers .
+70,what does the modified newtonian theory predict for pressure distribution on cylinders in hypersonic flow .
+71,how does the entropy layer affect hypersonic boundary layer calculations on blunt body forebodies .
+72,what experimental measurements of pressure distribution on ogive cylinders confirm hypersonic similarity law predictions .
+73,what is the range of mach number and fineness ratio for which the hypersonic similarity law applies .
+74,how is the hypersonic flow field calculated for axisymmetric bodies using the method of characteristics .
+75,what heat transfer and surface phenomena occur on hypersonic vehicle forebodies where boundary layer interaction is small .
+76,what theoretical and experimental comparisons exist for aerodynamic characteristics of cylinders in hypersonic flow .
+77,what are the theoretical shear buckling stresses for clamped rectangular flat plates .
+78,what exact solutions exist for buckling of an infinitely long flat plate under combined shear and transverse stress .
+79,what are the loads and deformations of a rectangular plate after buckling using large deflection theory .
+80,how can matrix structural analysis methods be used to solve nonlinear buckling and large deflection problems .
+81,what is the post buckling behavior of simply supported rectangular plates under compressive loading .
+82,what critical combinations of shear and direct stress cause buckling in long flat plates with elastically restrained edges .
+83,how does antisymmetrical buckling configuration change the predicted shear buckling stress for clamped plates .
+84,what nonlinear equations of von karman are used to study post buckling of rectangular plates .
+85,what are the buckling stresses for rectangular plates with various edge conditions under combined loading .
+86,how does initial deviation from flatness affect panel flutter critical velocity for a buckled plate .
+87,why does classical thin shell theory fail to correctly predict buckling load of cylindrical shells under axial compression .
+88,what theoretical buckling coefficients apply to simply supported corrugated core sandwich cylinders under combined loads .
+89,what stresses and displacements occur in clamped short oval cylindrical shells under hydrostatic pressure .
+90,what is the elastic stability of sandwich cylinders with corrugated cores and how is it calculated .
+91,what rigorous stress analysis reveals about the behavior of torispherical shells under internal pressure .
+92,what asymptotic solutions exist for the bending of thin toroidal elastic shells .
+93,what are the asymptotic integration methods available for solving toroidal shell problems under axial force .
+94,for which shell parameter ranges do compressive circumferential stresses cause elastic buckling in torispherical shells .
+95,how does the asme pressure vessel code fail to predict accurate stresses in torispherical heads .
+96,what are the general instability modes of cylindrical shells with corrugated cores under axial and lateral loads .
+97,what experimental and theoretical discrepancies exist in buckling load predictions for thin cylindrical shells .
+98,what is the buckling behavior of short oval cylindrical shells and how does shell theory apply .
+99,how is creep buckling analyzed and what weight strength criteria apply to columns under sustained load .
+100,what nonlinear structural analysis methods handle thermal creep and inelastic stress redistribution in shells .
+101,how is vorticity convected through a shock wave and what sinusoidal shear wave analysis applies .
+102,what analysis describes unsteady oblique interaction of a shock wave with plane disturbances including sound and entropy waves .
+103,how does a normal shock wave interact with weak plane disturbances and what refraction occurs .
+104,what is the flow field behind a curved shock wave in high speed viscous flow past a two dimensional body .
+105,how does shock wave boundary layer interaction cause leading edge separation in supersonic flow .
+106,what happens when a shock wave interacts with a laminar boundary layer on a compression ramp .
+107,what are the pressure distributions behind strong blast waves and their relation to steady hypersonic flows .
+108,how do shock waves of power law form relate to hypersonic flow fields near the body surface .
+109,what experimental data exists on pressure coefficient distributions behind normal and oblique shock interactions .
+110,what is the relationship between shock detachment distance and body pressure coefficient for blunt bodies .
+111,what supersonic second order theory describes oscillating two dimensional airfoils with thickness effects .
+112,what are the aerodynamic effects of jet mach number and nozzle divergence angle on base pressure at supersonic speeds .
+113,how is the base pressure on a body of revolution affected by jet exhaust at supersonic speeds .
+114,what wall interference effects occur at transonic speeds for a hemisphere cylinder model in wind tunnel tests .
+115,what pressure distribution is measured on a hemisphere cylinder model at transonic mach numbers between 0.7 and 1.1 .
+116,what methods calculate second order supersonic flow past airfoils and how does thickness influence the solution .
+117,how does wing planform shape affect flutter onset and what systematic variations have been investigated .
+118,what wind tunnel investigation exists of flutter effects on systematically varied wing plan forms at transonic speeds .
+119,what are the aerodynamic characteristics of lifting surfaces at mach numbers between 0.7 and 6.86 .
+120,what is the pressure distribution on the base annulus of a body of revolution at varying supersonic jet conditions .
+121,how does the divergence angle of a supersonic nozzle affect the base pressure on an axisymmetric body .
+122,what experimental investigation confirms second order supersonic theory for oscillating airfoils .
+123,what are the inviscid flow characteristics over blunt nosed slender bodies at hypersonic speeds .
+124,how is the drag of a blunt nose related to the energy content of the downstream flow field in hypersonic conditions .
+125,what is the relationship between crossflow mach number and drag coefficient for cylinders at high mach numbers .
+126,what is the effect of temperature jump in a rarefied moving gas on heat transfer to a flat plate .
+127,how does mean free path and knudsen number affect the boundary conditions in slip flow analysis .
+128,what continuum flow equations remain valid in the slip region and how should boundary conditions be modified .
+129,what perturbation analysis of slip effects on heat transfer and skin friction in laminar boundary layers has been done .
+130,how does the effect of slip at the wall interact with boundary layer compressibility at constant wall temperature .
+131,what solutions exist for slip flow over a flat plate in compressible conditions to second order approximation .
+132,how does rarefied gas flow behavior change heat transfer predictions compared to continuum flow assumptions .
+133,what second order corrections apply to the laminar compressible boundary layer in slip flow over a flat plate .
+134,how do large mean free path effects modify the skin friction on a plate in high altitude flight .
+135,what boundary layer analysis applies to low density slip flow conditions and what accuracy is achievable .
+136,what matrix structural analysis methods handle nonlinear problems including large deflections and thermal creep .
+137,what are the principles of creep buckling and weight strength analysis for columns under time dependent loading .
+138,how does shanley s tangent modulus load relate to actual column capacity under creep buckling conditions .
+139,what theory covers aircraft structural models subjected simultaneously to aerodynamic heating and external loads .
+140,what structural design factors dominate in high speed aircraft affected by thermal and aeroelastic loads .
+141,what similarity laws govern the stress analysis of heated plates compared to isothermal plates .
+142,how are inelastic stress redistribution and thermal creep handled in matrix structural analysis methods .
+143,what are the stresses and deformations in buckled rectangular plates under combined compressive loads .
+144,what nonlinear equations govern large deflection of rectangular plates after buckling onset .
+145,how are the ability of structures to withstand flight loads assessed when aerodynamic heating is present .
+146,what calculations and experiments describe the flow past circular cylinders at low speeds .
+147,what is the skin friction and heat transfer for a laminar boundary layer on a cylinder in axial incompressible flow .
+148,how do viscous flow equations apply to the steady flow past circular cylinders .
+149,what aerodynamic force coefficients are measured for a circular cylinder at angles of attack up to 90 degrees .
+150,what pressure distribution and force measurements on a cylinder at mach number 6.86 have been reported .
+151,how does the crossflow drag coefficient of a cylinder vary with mach number in hypersonic flow .
+152,what comparison exists between newtonian flow theory and experiment for cylinders in hypersonic wind tunnel tests .
+153,what experimental study confirms grimminger williams young hypersonic approximation for circular cylinders .
+154,how does drag coefficient of a cylinder normal to flow behave for mach numbers above 4 .
+155,what viscous flow solution methods are applicable to equations governing steady flow past cylinders and other shapes .
+156,what experimental investigation measures spanwise lift distribution on a wing in a propeller slipstream .
+157,how does angle of attack affect the lift increase of a wing operating in a propeller slipstream .
+158,what are the aeroelastic characteristics of lifting surfaces at high mach numbers for all movable control models .
+159,what flutter tests on double wedge airfoil models at varying mach numbers have been conducted .
+160,how does free stream velocity in a slipstream affect the spanwise lift distribution over a wing .
+161,what two dimensional unsteady supersonic flow theory is applicable to oscillating airfoils .
+162,how does wing aeroelasticity change under combined thermal and mechanical loading at supersonic speeds .
+163,what is the significance of reduced velocity in panel flutter analysis for two dimensional plates .
+164,what methods solve the two dimensional compressible boundary layer equations for a flat plate .
+165,how does compressibility affect the skin friction coefficient in laminar boundary layer flow .
+166,what are the equations for compressible flat plate boundary layer flow with combined dissociation and ionization .
+167,what magnetogas dynamic solutions exist for channel flow at constant temperature .
+168,how does equilibrium dissociation and ionization modify the laminar boundary layer on a flat plate .
+169,how does the energy equation of continuum flow apply into the slip flow regime for compressible boundary layers .
+170,what effect does an applied magnetic field have on aerodynamic heating in high speed compressible flow .
+171,what methods determine the density of the upper atmosphere from analysis of satellite orbital data .
+172,how does atmospheric rotation affect the determination of upper atmosphere density from satellite orbits .
+173,what further results on satellite orbits reveal about seasonal and latitude variations in upper atmosphere density .
+174,what asymptotic methods solve thin toroidal elastic shell problems under symmetric loading .
+175,what are the solutions to the bending of curved tubes and toroidal expansion joints under axial force .
+176,how does the membrane state approximation fail for toroidal shells and what more rigorous approach is needed .
+177,what compressive circumferential stresses exist in torispherical shell heads and when do they cause buckling .
+178,how should designers modify asme code procedures for torispherical pressure vessel heads with high diameter thickness ratios .
+179,how is a spatial pattern of vorticity represented and what happens when it passes through a shock wave .
+180,what fourier integral analysis applies to the convection of vorticity through a normal shock wave .
+181,what sound waves are generated when vorticity interacts with a plane normal shock wave .
+182,how does an entropy wave interact with a plane normal shock wave and what is the transmitted disturbance .
+183,what wind tunnel measurements describe jet effects on base pressure annulus at supersonic speeds .
+184,how does the nozzle divergence angle influence jet expansion and base pressure behind a body of revolution .
+185,what is the effect of jet mach number on the pressure distribution at the base of a supersonic body .
+186,what transonic wind tunnel results show about interference effects on hemisphere cylinder pressure distributions .
+187,how is the incompressible viscous flow past a two dimensional body analyzed using boundary layer methods .
+188,what boundary layer solutions exist for steady incompressible flow over a flat plate in shear flow .
+189,how do approximate solutions of the incompressible boundary layer equations compare with exact results .
+190,what are the boundary layer thickness and skin friction distributions for a flat plate in shear flow .
+191,how does a curved shock wave near the leading edge affect the boundary layer in high speed viscous flow .
+192,what velocity profiles in the boundary layer near the leading edge of a body at high speed are known .
+193,how is the inviscid shear flow external to the boundary layer computed for high speed flows .
+194,what methods allow systematic investigation of upper atmosphere properties using satellite orbit perturbations .
+195,what are the explicit solutions for magnetogas dynamic channel flow and their aerodynamic implications .
+196,how does nose tail interaction in slender vehicles affect aerodynamic loading estimates .
+197,what are the equations of rotationally symmetric small deflection of thin toroidal shells and their solutions .
+198,what asymptotic integration methods exist for thin shell problems and what refinements have been proposed .
+199,what experimental aerodynamic investigation has studied lift distribution changes due to propeller slipstream effects .
+200,what heat transfer and friction results exist for laminar flow on a cylinder compared to flat plate solutions .
+ 
