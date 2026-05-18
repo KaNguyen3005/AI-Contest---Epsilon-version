@@ -214,3 +214,63 @@ vi leave-one-out chi bat khi `--queries` trung file public train.
 Luu y: baseline nay co the tang F1 manh neu private queries cung phan phoi
 voi public train, nhung van co rui ro overfit neu private doi chu de hoac cach
 dien dat.
+
+### Synthetic stress test
+
+Repo co the chay test tren `data/synthetic_queries.csv` va
+`data/synthetic_answers.csv` de kiem tra khi query/answer khac phan phoi
+public. Test nay so sanh BM25, ProfileKNN leave-one-out, ProfileKNN holdout,
+va case private query trung `query_id` public nhung noi dung khac.
+
+```bash
+python ir_baseline/ir_baseline/run_synthetic_profile_knn_test.py
+```
+
+Ket qua mau tren synthetic hien tai:
+
+```text
+BM25 synthetic        F1=0.4494
+ProfileKNN LOO        F1=0.3048
+Adaptive ensemble     F1=0.4214
+ProfileKNN holdout    F1=0.3048
+Query-id collision    PASS
+```
+
+Dien giai: synthetic distribution khong co nhieu cum paraphrase nhu public,
+nen profile matching kem BM25. Day la bang chung nen giu BM25/RRF lam backup
+neu private test lech public train.
+
+## Adaptive Ensemble Submission
+
+`AdaptiveProfileBM25Ensemble` ket hop ProfileKNN va BM25 theo tung query:
+
+- Neu nearest public profile manh va dong y voi BM25, nghieng ve ProfileKNN.
+- Neu profile yeu hoac bat dong voi BM25, fallback ve BM25.
+
+Chay public validation:
+
+```bash
+python ir_baseline/ir_baseline/run_adaptive_ensemble.py
+```
+
+Chay private submission:
+
+```bash
+python ir_baseline/ir_baseline/run_adaptive_ensemble.py ^
+    --queries data/private_test_queries.csv ^
+    --output submissions/adaptive_ensemble_private_submission.csv
+```
+
+Ket qua hien tai:
+
+```text
+ProfileKNN public LOO      F1=0.8643
+Adaptive ensemble public   F1=0.8263
+BM25 synthetic             F1=0.4494
+ProfileKNN synthetic       F1=0.3048
+Adaptive ensemble synthetic F1=0.4214
+```
+
+Khuyen nghi: dung `ProfileKNN` neu tin private rat giong public; dung
+`Adaptive ensemble` neu muon submission can bang hon khi private co kha nang
+lech phan phoi.
